@@ -1,0 +1,150 @@
+
+\documentclass[a4paper,10pt]{article}
+
+\usepackage{latexsym}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{marvosym}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{enumitem}
+\usepackage[pdftex, hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage{fontawesome}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{geometry}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+\geometry{bottom=0.5in, right=0.75in}
+
+\addtolength{\oddsidemargin}{-1in}
+\addtolength{\evensidemargin}{-1in}
+\addtolength{\textwidth}{1.25in}
+\addtolength{\topmargin}{-1.25in}
+\addtolength{\textheight}{1.25in}
+
+\urlstyle{rm}
+
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+
+\titleformat{\section}{
+  \vspace{-8pt}\scshape\raggedright\large
+}{}{0em}{}[\color{black}\titlerule \vspace{-4pt}]
+
+\newcommand{\resumeItem}[2]{
+  \item\small{
+    \textbf{#1}{ : #2 \vspace{-2pt}}
+  }
+}
+
+\newcommand{\resumeItemWithoutTitle}[1]{
+  \item\small{
+    #1 \vspace{-2pt}
+  }
+}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-1pt}\item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & #2 \\
+      \textit{#3} & \textit{#4} \\
+    \end{tabular*}\vspace{-3pt}
+}
+
+\newcommand{\resumeSubItem}[2]{\resumeItem{#1}{#2}\vspace{-3pt}}
+
+\renewcommand{\labelitemii}{$\circ$}
+
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=*]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+
+\begin{document}
+
+\begin{center}
+    {\Huge \scshape Marcus Rodriguez} \\[8pt]
+    \small
+    \faPhone ~ \href{tel:+1-512-555-7890}{+1-512-555-7890} ~|~ 
+    \faEnvelope ~ \href{mailto:marcus.rodriguez@utexas.edu}{marcus.rodriguez@utexas.edu} ~|~ 
+    \faLinkedin ~ \href{https://www.linkedin.com/in/marcusrdev/}{marcusrdev} ~|~ 
+    \faGithub ~ \href{https://github.com/marcusrod}{marcusrod}
+\end{center}
+
+\section{Education}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {University of Texas at Austin}{Austin, TX}
+      {Bachelor of Science in Computer Science GPA:3.78}{August 2019 - May 2023}
+
+      \textbf{Courses:}
+        Algorithms \& Complexity, Machine Learning, Data Mining, Cloud Computing, Operating Systems, Computer Networks.
+  \resumeSubHeadingListEnd
+
+\section{Technical Skills}
+  \resumeSubHeadingListStart
+
+    \resumeSubItem{Languages}{Python, Java, Scala, JavaScript, SQL}
+    \resumeSubItem{Big Data \& Cloud}{Apache Spark, Hadoop, Kafka, AWS EMR, Databricks, Airflow}
+    \resumeSubItem{ML \& AI}{PyTorch, Scikit-learn, Hugging Face, LangChain, Pandas, NumPy}
+  \resumeSubHeadingListEnd
+
+\section{Experience}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {Data Engineer}{Austin, TX}
+      {Meta Platforms}{June 2023 - Present}
+      \resumeItemListStart
+      
+    \resumeItemWithoutTitle{Built real-time data pipelines processing 2PB+ daily using Apache Flink and Kafka}
+    \resumeItemWithoutTitle{Optimized Spark jobs reducing computation costs by 35\% through partitioning strategies}
+    \resumeItemWithoutTitle{Implemented data quality frameworks catching 99.9\% of anomalies before production}
+      \resumeItemListEnd
+    \resumeSubheading
+      {Software Engineering Intern}{Seattle, WA}
+      {Databricks}{May 2022 - August 2022}
+      \resumeItemListStart
+      
+    \resumeItemWithoutTitle{Developed Delta Lake optimization features improving query performance by 40\%}
+    \resumeItemWithoutTitle{Created automated testing suite for ETL pipelines reducing bug detection time by 60\%}
+    \resumeItemWithoutTitle{Collaborated with PMs to design intuitive APIs for data ingestion workflows}
+      \resumeItemListEnd
+\resumeSubHeadingListEnd
+
+\section{Projects}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {RealTimeStockPredictor}{}
+      {Self-Initiated Project}{January 2024 - March 2024}
+    \begin{itemize}
+        \item Built streaming ML pipeline using Kafka and Spark Streaming to predict stock prices with 87\% accuracy
+    \item Deployed model serving infrastructure on Kubernetes handling 10K+ predictions per second
+    \item Created React dashboard for real-time visualization of market trends and model drift
+    \end{itemize}
+    \resumeSubheading
+      {NLPResearchAssistant}{}
+      {Academic Project}{September 2022 - May 2023}
+    \begin{itemize}
+        \item Fine-tuned BERT models for scientific paper summarization achieving ROUGE-1 score of 0.42
+    \item Implemented citation network analysis using Graph Neural Networks to recommend relevant papers
+    \item Published findings at undergraduate research symposium, winning best poster award
+    \end{itemize}
+    \resumeSubheading
+      {SupplyChainOptimizer}{}
+      {Professional Project}{March 2023 - June 2023}
+    \begin{itemize}
+        \item Designed optimization algorithms for inventory management reducing waste by 25\%
+    \item Built automated reporting system generating insights for 500+ retail locations
+    \item Integrated with legacy ERP systems using REST APIs and message queues
+    \end{itemize}
+  \resumeSubHeadingListEnd
+
+\end{document}
