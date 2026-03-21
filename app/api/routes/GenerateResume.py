@@ -1,15 +1,15 @@
 import uuid
 from fastapi import FastAPI, APIRouter, BackgroundTasks
 from fastapi.responses import JSONResponse, FileResponse
-from app.core.LatexTemplate import generate_latex
+from app.core.LatexModule.LatexTemplate import generate_latex
 from app.core.model import ResumeData
-from app.core.LatexFunction import render
+from app.core.LatexModule.LatexFunction import render
 
 generate_resume_router = APIRouter(tags=["generate_resume"])
 app = FastAPI()
 
 @generate_resume_router.post("/generate_resume")
-def generate_resume(resume_data: ResumeData, background_tasks: BackgroundTasks):
+def generate_resume(resume_data: ResumeData):
     latex_code = generate_latex(resume_data)
     
     unique_id = uuid.uuid4().hex
