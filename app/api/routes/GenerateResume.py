@@ -1,5 +1,5 @@
 import uuid
-from fastapi import FastAPI, APIRouter, BackgroundTasks
+from fastapi import FastAPI, APIRouter
 from fastapi.responses import JSONResponse, FileResponse
 from app.core.LatexModule.LatexTemplate import generate_latex
 from app.core.model import ResumeData
