@@ -15,9 +15,7 @@ async def build_knowledge_graph(file: UploadFile = File(...)):
         if file.content_type != "application/pdf":
             raise HTTPException(status_code=400, detail="File must be a PDF")
         
-        # Save uploaded PDF into project `resumes/` directory so external
-        # pipeline code can reliably access it (avoids NamedTemporaryFile
-        # cross-process visibility/permission issues on some platforms).
+
         from uuid import uuid4
 
         resumes_dir = os.path.join(os.getcwd(), "resumes")
@@ -31,7 +29,7 @@ async def build_knowledge_graph(file: UploadFile = File(...)):
             out.write(content)
 
         neo4j_service = get_neo4j_service()
-        # Pass absolute path to the pipeline
+
         await neo4j_service.pipe_line_pdf(
             db_name=os.getenv("NEO4J_DATABASE"),
             pdf_path=os.path.abspath(saved_path)

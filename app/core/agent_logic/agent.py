@@ -4,6 +4,7 @@ from langchain_ollama import ChatOllama
 from app.core.mysql_database.mysql_service import get_mysql_service, close_mysql_service
 from app.core.agent_logic.prompts import SYSTEM_PROMPT
 from app.core.agent_logic.tools import generate_resume, context_for_resume
+from app.core.model import AIResponse, ResumeData
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -45,11 +46,19 @@ async def chat_agent(session_id: str, user_input: str) -> str:
 
     response = await agent.ainvoke({"messages": history})
     assistant_reply = response["messages"][-1].content
-
+    
+    try:
+        if isinstance(assistant_reply, str):
+            clean_json = assistant_reply.replace("```json", "").replace("```", "").strip()
+            parsed_response = AIResponse.model_validate_json(clean_json)
+        else:
+            parsed_response = AIResponse.model_validate(assistant_reply)
+    except Exception as e:
+        parsed_response = AIResponse(response=assistant_reply, resume=None)
     manager.store_message(session_id, "user", user_input)
-    manager.store_message(session_id, "agent", assistant_reply)
+    manager.store_message(session_id, "agent", parsed_response.response)
 
-    return assistant_reply
+    return parsed_response
 
 async def main():
     session_id = "test-session-001"   

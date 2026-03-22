@@ -1,6 +1,8 @@
 from pydantic import BaseModel, Field
 from typing import List, Optional, Literal
 
+
+
 class PersonalInfo(BaseModel):
     full_name: str
     phone: str
@@ -41,3 +43,7 @@ class ResumeData(BaseModel):
     skills: List[SkillItem]  
     experience: List[Experience]
     projects: List[Project]
+
+class AIResponse(BaseModel):
+    response: str
+    resume: Optional[ResumeData] = None

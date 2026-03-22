@@ -24,6 +24,7 @@ async def chat(
     response = await chat_agent(session_id, query)
 
     return JSONResponse(content={
-        "answer": response,
-        "session_id": session_id
+        "answer": response.response,
+        "session_id": session_id,
+        "resume_data": response.resume.dict() if response.resume else None
     })

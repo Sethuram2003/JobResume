@@ -1,6 +1,6 @@
 from app.core.model import ResumeData, PersonalInfo, Education, SkillItem, Experience, Project
-from app.core.LatexFunction import render
-from app.core.LatexTemplate import generate_latex
+from app.core.LatexModule.LatexFunction import render
+from app.core.LatexModule.LatexTemplate import generate_latex
 
 resume_data = ResumeData(
         personal_info=PersonalInfo(
