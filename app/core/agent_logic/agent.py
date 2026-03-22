@@ -3,7 +3,7 @@ from langchain.agents import create_agent
 from langchain_ollama import ChatOllama
 from app.core.mysql_database.mysql_service import get_mysql_service, close_mysql_service
 from app.core.agent_logic.prompts import SYSTEM_PROMPT
-from app.core.agent_logic.tools import generate_resume
+from app.core.agent_logic.tools import generate_resume, context_for_resume
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -39,7 +39,7 @@ async def chat_agent(session_id: str, user_input: str) -> str:
 
     agent = create_agent(
         llm,
-        tools=[generate_resume],
+        tools=[generate_resume, context_for_resume],
         system_prompt=SYSTEM_PROMPT
     )
 
