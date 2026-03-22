@@ -6,7 +6,7 @@ from app.core.neo4j_database.neo4j_service import get_neo4j_service
 
 router = APIRouter(prefix="/kg", tags=["knowledge-graph"])
 
-@router.post("/build")
+@router.put("/build")
 async def build_knowledge_graph(file: UploadFile = File(...)):
     """
     Build knowledge graph from uploaded PDF file
