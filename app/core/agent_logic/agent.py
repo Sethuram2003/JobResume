@@ -3,8 +3,10 @@ from langchain.agents import create_agent
 from langchain_ollama import ChatOllama
 from app.core.mysql_database.mysql_service import get_mysql_service, close_mysql_service
 from app.core.agent_logic.prompts import SYSTEM_PROMPT
-from app.core.agent_logic.tools import generate_resume, context_for_resume
+from app.core.agent_logic.tools import context_for_resume
 from app.core.model import AIResponse, ResumeData
+import json
+import re
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -36,29 +38,43 @@ async def chat_agent(session_id: str, user_input: str) -> str:
 
     history.append({"role": "user", "content": user_input})
 
-    llm = ChatOllama(model="kimi-k2:1t-cloud")
+    llm = ChatOllama(model="deepseek-v3.1:671b-cloud")
 
     agent = create_agent(
         llm,
-        tools=[generate_resume, context_for_resume],
-        system_prompt=SYSTEM_PROMPT
+        tools=[context_for_resume],
+        system_prompt=SYSTEM_PROMPT,
+        response_format=AIResponse.schema()
     )
 
     response = await agent.ainvoke({"messages": history})
-    assistant_reply = response["messages"][-1].content
-    
-    try:
-        if isinstance(assistant_reply, str):
-            clean_json = assistant_reply.replace("```json", "").replace("```", "").strip()
-            parsed_response = AIResponse.model_validate_json(clean_json)
-        else:
-            parsed_response = AIResponse.model_validate(assistant_reply)
-    except Exception as e:
-        parsed_response = AIResponse(response=assistant_reply, resume=None)
-    manager.store_message(session_id, "user", user_input)
-    manager.store_message(session_id, "agent", parsed_response.response)
+    final_content = response["messages"][-1].content
 
-    return parsed_response
+    try:
+        parsed = json.loads(final_content)
+    except json.JSONDecodeError:
+        # Look for a JSON object in the text
+        json_match = re.search(r'\{.*\}', final_content, re.DOTALL)
+        if json_match:
+            parsed = json.loads(json_match.group())
+        else:
+            parsed = {"response": final_content, "resume": None}
+
+    # Validate with Pydantic model
+    try:
+        ai_response = AIResponse(**parsed)
+    except Exception as e:
+        # If validation fails, return an error JSON
+        ai_response = AIResponse(
+            response=f"Error processing response: {e}\nRaw: {final_content}",
+            resume=None
+        )
+    
+    
+    manager.store_message(session_id, "user", user_input)
+    manager.store_message(session_id, "agent", final_content)
+
+    return final_content
 
 async def main():
     session_id = "test-session-001"   

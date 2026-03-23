@@ -3,6 +3,7 @@ from fastapi import FastAPI, Form, APIRouter
 from dotenv import load_dotenv
 import uuid
 from app.core.agent_logic.agent import chat_agent
+from app.core.model import AIResponse
 
 load_dotenv()
 
@@ -23,8 +24,4 @@ async def chat(
 
     response = await chat_agent(session_id, query)
 
-    return JSONResponse(content={
-        "answer": response.response,
-        "session_id": session_id,
-        "resume_data": response.resume.dict() if response.resume else None
-    })
+    return JSONResponse(content=AIResponse.parse_raw(response).dict())
