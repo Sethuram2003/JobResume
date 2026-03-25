@@ -4,7 +4,6 @@ from dotenv import load_dotenv
 import uuid
 from app.core.agent_logic.agent import chat_agent
 from app.core.model import AIResponse
-from test_agent import run_resume_optimizer
 
 load_dotenv()
 
@@ -23,6 +22,6 @@ async def chat(
     if not session_id:
         session_id = str(uuid.uuid4())
 
-    response = await run_resume_optimizer(query)
+    response = await chat_agent(session_id, query)
 
-    return JSONResponse(content=AIResponse(**response["generator_output"]) if response["generator_output"] else None, status_code=200)
+    return JSONResponse(content=response.dict(), status_code=200)

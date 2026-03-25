@@ -1,6 +1,7 @@
 import asyncio
 from langchain.agents import create_agent
 from langchain_ollama import ChatOllama
+from langchain_core.messages import SystemMessage
 from app.core.mysql_database.mysql_service import get_mysql_service, close_mysql_service
 from app.core.agent_logic.prompts import SYSTEM_PROMPT
 from app.core.agent_logic.tools import context_for_resume
@@ -25,30 +26,31 @@ async def chat_agent(session_id: str, user_input: str) -> str:
     Process a user input, using the last 5 messages from the database as context.
     Returns the agent's response.
     """
-    manager = get_mysql_service()
+    # manager = get_mysql_service()
 
-    recent_messages = manager.get_session_history(
-        session_identifier=session_id,
-        limit=50,
-        order="desc"
-    )
-    recent_messages.reverse() 
+    # recent_messages = manager.get_session_history(
+    #     session_identifier=session_id,
+    #     limit=50,
+    #     order="desc"
+    # )
+    # recent_messages.reverse() 
 
-    history = db_messages_to_langchain(recent_messages)
+    history = []
 
     history.append({"role": "user", "content": user_input})
 
-    llm = ChatOllama(model="deepseek-v3.1:671b-cloud")
+    llm = ChatOllama(model="minimax-m2.7:cloud")
 
     agent = create_agent(
         llm,
         tools=[context_for_resume],
-        system_prompt=SYSTEM_PROMPT,
-        response_format=AIResponse.schema()
+        system_prompt=SystemMessage(content=SYSTEM_PROMPT)
     )
 
     response = await agent.ainvoke({"messages": history})
     final_content = response["messages"][-1].content
+
+    print("Raw agent response:", final_content)
 
     try:
         parsed = json.loads(final_content)
@@ -69,12 +71,12 @@ async def chat_agent(session_id: str, user_input: str) -> str:
             response=f"Error processing response: {e}\nRaw: {final_content}",
             resume=None
         )
+    print(ai_response)
     
-    
-    manager.store_message(session_id, "user", user_input)
-    manager.store_message(session_id, "agent", final_content)
+    # manager.store_message(session_id, "user", user_input)
+    # manager.store_message(session_id, "agent", final_content)
 
-    return final_content
+    return ai_response
 
 async def main():
     session_id = "test-session-001"   
