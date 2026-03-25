@@ -11,7 +11,8 @@ from neo4j_graphrag.experimental.components.text_splitters.fixed_size_splitter i
 import os
 import asyncio
 
-from app.core.neo4j_database.prompts import rag_template
+from app.core.neo4j_database.prompts import rag_template_resume, RESUME_EXTRACTION_TEMPLATE
+from app.core.neo4j_database.schema import RESUME_GRAPH_SCHEMA
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -93,9 +94,9 @@ class Neo4jDBManager:
                     text_splitter=FixedSizeSplitter(chunk_size=800, chunk_overlap=100),
                     embedder=azure_embedding,
                     neo4j_database=db_name,
-                    # prompt_template=PROMPT_TEMPLATE,
+                    prompt_template=RESUME_EXTRACTION_TEMPLATE,
                     # schema="EXTRACTED",
-                    # schema=GRAPH_SCHEMA,
+                    schema=RESUME_GRAPH_SCHEMA,
                     from_pdf=False
                     )
 
@@ -127,9 +128,9 @@ class Neo4jDBManager:
                         text_splitter=FixedSizeSplitter(chunk_size=800, chunk_overlap=100),
                         embedder=azure_embedding,
                         neo4j_database=db_name,
-                        # prompt_template=PROMPT_TEMPLATE,
+                        prompt_template=RESUME_EXTRACTION_TEMPLATE,
                         # schema="EXTRACTED",
-                        # schema=GRAPH_SCHEMA,
+                        schema=RESUME_GRAPH_SCHEMA,
                         from_pdf=True
                         )
 
@@ -186,7 +187,7 @@ class Neo4jDBManager:
         rag = GraphRAG(
             retriever=retriever,
             llm=llm,
-            prompt_template=rag_template
+            prompt_template=rag_template_resume
         )
 
         print("Running RAG query...")

@@ -55,6 +55,51 @@ Input text:
 {text}
 """
 
+RESUME_EXTRACTION_TEMPLATE = """
+You are an expert data extraction algorithm specialized in parsing professional profiles, resumes, and portfolios.
+Your task is to extract a knowledge graph from the input text, STRICTLY adhering to the provided graph schema.
+
+Here is the allowed Graph Schema:
+{schema}
+
+IMPORTANT RULES:
+1. STRICT SCHEMA COMPLIANCE: You must ONLY extract node labels and relationship types that are explicitly defined in the provided schema. Do NOT invent new node types (like "Company" or "Technology") or relationships. If it doesn't fit the schema, ignore it.
+2. ENTITY RESOLUTION: Ensure that nodes representing the same entity (e.g., the same person, the same skill like 'Python') have exactly the same "name" to avoid duplication in the graph.
+3. PROPERTY EXTRACTION: Extract properties for each node as defined in the schema. If a property (like 'duration' or 'gpa') is not mentioned in the text, omit it. Every node MUST have a "name" property.
+4. ACCURACY: Only extract facts that are explicitly stated in the input text. Do not hallucinate skills or experiences.
+5. DIRECTIONALITY: Ensure relationships strictly follow the patterns defined in the schema (e.g., 'Person' -> 'HAS_EXPERIENCE' -> 'Experience').
+
+Return a valid JSON object containing the extracted nodes and relationships. The structure must follow this exact format:
+{{
+  "nodes": [
+    {{ 
+      "id": "unique_string_id_1", 
+      "label": "Person", 
+      "properties": {{ "name": "Sethuram Gautham", "location": "New York" }} 
+    }},
+    {{ 
+      "id": "unique_string_id_2", 
+      "label": "Skill", 
+      "properties": {{ "name": "Python", "category": "Programming Languages" }} 
+    }}
+  ],
+  "relationships": [
+    {{ 
+      "type": "USES_SKILL", 
+      "start_node_id": "unique_string_id_1", 
+      "end_node_id": "unique_string_id_2", 
+      "properties": {{}} 
+    }}
+  ]
+}}
+
+Examples:
+{examples}
+
+Input text:
+{text}
+"""
+
 
 PROMPT_TEMPLATE = """
 You are a top-tier knowledge engineering algorithm. Your task is to transform travel data into a high-fidelity Knowledge Graph JSON.
@@ -113,6 +158,29 @@ rag_template = RagTemplate(template='''Answer the Question using the following C
 
 # Context:
 {context}
+
+# Answer:
+''', expected_inputs=['query_text', 'context'])
+
+
+rag_template_resume = RagTemplate(template='''
+You are a professional assistant specialized in analyzing career profiles and technical repositories. 
+Your goal is to provide accurate, concise answers based ONLY on the provided Context, which includes both text excerpts and structured graph relationships.
+
+# Context Description:
+The context below contains "Text Chunks" (narrative descriptions) and "Graph Relationships" (structured connections between Entities, Skills, Projects, and Experiences).
+
+# Context:
+{context}
+
+# Instructions:
+1. Use the Graph Relationships to identify specific links between skills and projects (e.g., if a Project USES_SKILL Python).
+2. If the question asks for "what," "how," or "where," prioritize information found in the structured relationships.
+3. If the information is not present in the Context, state clearly that you do not have enough information. 
+4. Do not mention the existence of the "Context" or "Graph" in your final answer; speak naturally.
+
+# Question:
+{query_text}
 
 # Answer:
 ''', expected_inputs=['query_text', 'context'])

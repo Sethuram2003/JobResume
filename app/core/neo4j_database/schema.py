@@ -1,97 +1,92 @@
 NODE_TYPES = [
     {
-        "label": "User", 
+        "label": "Person",
         "properties": [
-            {"name": "user_id", "type": "STRING", "description": "The unique ID for your single user"},
-            {"name": "name", "type": "STRING", "description": "e.g., 'Alex'"},
-            {"name": "current_mood", "type": "STRING", "description": "Updated dynamically based on last session"}
+            {"name": "name", "type": "STRING", "description": "Full name of the person"},
+            {"name": "email", "type": "STRING"},
+            {"name": "phone", "type": "STRING"},
+            {"name": "location", "type": "STRING"}
         ]
     },
     {
-        "label": "Agent", 
+        "label": "Education",
         "properties": [
-            {"name": "agent_id", "type": "STRING"},
-            {"name": "persona_name", "type": "STRING", "description": "e.g., 'Helpful Companion'"}
+            {"name": "degree", "type": "STRING", "description": "e.g., Master of Science in Data Science"},
+            {"name": "institution", "type": "STRING"},
+            {"name": "duration", "type": "STRING"},
+            {"name": "gpa", "type": "STRING"}
         ]
     },
     {
-        "label": "Session", 
+        "label": "Course",
         "properties": [
-            {"name": "session_id", "type": "STRING"},
-            {"name": "start_time", "type": "ZONED_DATETIME"}, 
-            {"name": "summary", "type": "STRING"},
-            {"name": "topic_tags", "type": "LIST"} 
+            {"name": "name", "type": "STRING", "description": "Name of the course"},
+            {"name": "description", "type": "STRING", "description": "Topics covered in the course"}
         ]
     },
     {
-        "label": "Message", 
+        "label": "Experience",
         "properties": [
-            {"name": "content", "type": "STRING"},
-            {"name": "role", "type": "STRING"},
-            # FIX: Changed DATETIME to ZONED_DATETIME
-            {"name": "timestamp", "type": "ZONED_DATETIME"},
-            {"name": "sentiment_score", "type": "FLOAT"}
+            {"name": "role", "type": "STRING", "description": "Job title or position"},
+            {"name": "organization", "type": "STRING", "description": "Company or organization name"},
+            {"name": "duration", "type": "STRING"}
         ]
     },
     {
-        "label": "Fact", 
+        "label": "Project",
         "properties": [
-            {"name": "category", "type": "STRING"},
-            {"name": "value", "type": "STRING"},
-            {"name": "confidence", "type": "FLOAT"}
+            {"name": "name", "type": "STRING", "description": "Project title"},
+            {"name": "description", "type": "STRING", "description": "Brief summary of what the project does"}
         ]
     },
     {
-        "label": "Entity", 
+        "label": "Skill",
         "properties": [
-            {"name": "name", "type": "STRING"},
-            {"name": "type", "type": "STRING"}
+            {"name": "name", "type": "STRING", "description": "Name of the tool, language, framework, or concept (e.g., Python, Neo4j, LangChain)"},
+            {"name": "category", "type": "STRING", "description": "e.g., Programming Languages, Databases, Cloud"}
+        ]
+    },
+    {
+        "label": "Certification",
+        "properties": [
+            {"name": "name", "type": "STRING", "description": "Name of the certificate or course"},
+            {"name": "issuer", "type": "STRING", "description": "Organization that issued the certificate"}
+        ]
+    },
+    {
+        "label": "Publication",
+        "properties": [
+            {"name": "title", "type": "STRING"},
+            {"name": "conference", "type": "STRING"}
         ]
     }
 ]
 
 RELATIONSHIP_TYPES = [
-    {"label": "HAS_SESSION", "description": "User -> Session. The main branch connector."},
-    {"label": "CONTAINS_THREAD", "description": "Session -> Message (The first message of the session)."},
-    {"label": "NEXT_MESSAGE", "description": "Message -> Message. Maintains the linear flow of chat."},
-    
-    {"label": "SENT_BY", "description": "Message -> User OR Message -> Agent"},
-    
-    {"label": "KNOWS_FACT", "description": "User -> Fact. (e.g., User KNOWS_FACT 'Is a Nurse')"},
-    {"label": "MENTIONS_ENTITY", "description": "Message -> Entity. (e.g., 'I love Luna' -> Luna)"},
-    {"label": "RELATED_TO", "description": "Entity -> Entity. (e.g., Luna RELATED_TO Cat)"},
-    
-    {"label": "EXTRACTED_FROM", "description": "Fact -> Session. Helps you know WHICH conversation revealed the fact."}
+    {"label": "HAS_EDUCATION", "description": "Person -> Education. Links a person to their degrees."},
+    {"label": "COMPLETED_COURSE", "description": "Education -> Course. Links a degree program to specific coursework."},
+    {"label": "HAS_EXPERIENCE", "description": "Person -> Experience. Links a person to their jobs."},
+    {"label": "WORKED_ON", "description": "Person -> Project OR Experience -> Project. Links a person or a job to a specific project."},
+    {"label": "USES_SKILL", "description": "Person -> Skill, Project -> Skill, OR Experience -> Skill. Tracks what technologies were used where."},
+    {"label": "HAS_CERTIFICATION", "description": "Person -> Certification."},
+    {"label": "PUBLISHED", "description": "Person -> Publication."}
 ]
 
 PATTERNS = [
-    ["User", "HAS_SESSION", "Session"],
-    
-    ["Session", "CONTAINS_THREAD", "Message"], 
-    ["Message", "NEXT_MESSAGE", "Message"],
-    
-    ["Message", "SENT_BY", "User"],
-    ["Message", "SENT_BY", "Agent"],
-    
-    ["User", "KNOWS_FACT", "Fact"],
-    ["Fact", "EXTRACTED_FROM", "Session"], 
-    
-    ["Message", "MENTIONS_ENTITY", "Entity"],
-    ["Entity", "RELATED_TO", "Entity"]
+    ["Person", "HAS_EDUCATION", "Education"],
+    ["Education", "COMPLETED_COURSE", "Course"],
+    ["Person", "HAS_EXPERIENCE", "Experience"],
+    ["Person", "WORKED_ON", "Project"],
+    ["Experience", "WORKED_ON", "Project"],
+    ["Person", "USES_SKILL", "Skill"],
+    ["Project", "USES_SKILL", "Skill"],
+    ["Experience", "USES_SKILL", "Skill"],
+    ["Person", "HAS_CERTIFICATION", "Certification"],
+    ["Person", "PUBLISHED", "Publication"]
 ]
 
-GRAPH_SCHEMA = {
+RESUME_GRAPH_SCHEMA = {
     "node_types": NODE_TYPES,
     "relationship_types": RELATIONSHIP_TYPES,
     "patterns": PATTERNS
 }
-
-
-
-
-
-
-
-
-
-
