@@ -1,0 +1,411 @@
+{
+  "name": "Job Application",
+  "nodes": [
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:8000/chat",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "query",
+              "value": "=Job Title: {{ $json.title }} Job Description: {{ $json.description }}"
+            },
+            {
+              "name": "session_id",
+              "value": "={{ $now }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1024,
+        144
+      ],
+      "id": "4bc26b63-8a19-4c24-b929-dfdcd1f442d6",
+      "name": "HTTP Request1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:8000/generate_resume",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.resume }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1232,
+        144
+      ],
+      "id": "483cb801-0b0d-49db-bbfa-e6733fa7b4d4",
+      "name": "HTTP Request2"
+    },
+    {
+      "parameters": {
+        "name": "=Sethuram_Gautham_{{ $('Limit').item.json.job_id }}_{{ $('Limit').item.json.company }}",
+        "driveId": {
+          "__rl": true,
+          "value": "My Drive",
+          "mode": "list",
+          "cachedResultName": "My Drive",
+          "cachedResultUrl": "https://drive.google.com/drive/my-drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "1Tz_OGxdt3RCexAghuuqsovQeO5hMfcp1",
+          "mode": "list",
+          "cachedResultName": "resume",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1Tz_OGxdt3RCexAghuuqsovQeO5hMfcp1"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1456,
+        144
+      ],
+      "id": "3c40b447-86c3-44a8-bebb-746f9a21a0d9",
+      "name": "Upload file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "z5KnLpEhVcYJDYnR",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "19pFfNojSYAhkcfOH09LD0YOt0S0LUQg_fHTeuZll-lM",
+          "mode": "list",
+          "cachedResultName": "JobApplicationResumes",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/19pFfNojSYAhkcfOH09LD0YOt0S0LUQg_fHTeuZll-lM/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/19pFfNojSYAhkcfOH09LD0YOt0S0LUQg_fHTeuZll-lM/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ResumeLink": "={{ $json.webViewLink }}",
+            "Id": "={{ $('Limit').item.json.job_id }}",
+            "Company": "={{ $('Limit').item.json.company }}",
+            "Location": "={{ $('Limit').item.json.location }}",
+            "JobTitle": "={{ $('Limit').item.json.title }}",
+            "JobApplyLink": "={{ $('Limit').item.json.link }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Id",
+              "displayName": "Id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "ResumeLink",
+              "displayName": "ResumeLink",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "JobApplyLink",
+              "displayName": "JobApplyLink",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "JobTitle",
+              "displayName": "JobTitle",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Company",
+              "displayName": "Company",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Location",
+              "displayName": "Location",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1600,
+        144
+      ],
+      "id": "c41329bc-7cf9-446e-825f-c59f6f4bceef",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "QlohGV7sqPRVS5q6",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "formTitle": "JobResumeGenerator",
+        "formDescription": "Just input your job keyword, max number of job you want to  apply and job location",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Job Keyword"
+            },
+            {
+              "fieldLabel": "Max",
+              "fieldType": "number"
+            },
+            {
+              "fieldLabel": "Location"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.5,
+      "position": [
+        192,
+        144
+      ],
+      "id": "7df6a23a-153d-40c7-82b7-6a7cddb2dd54",
+      "name": "On form submission",
+      "webhookId": "96e49dfc-d8ec-4e4b-ac4c-ec5bce84d2b9"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:8000/LinkedinScrape",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "keyword",
+              "value": "={{ $json['Job Keyword'] }}"
+            },
+            {
+              "name": "location",
+              "value": "={{ $json.Location }}"
+            },
+            {
+              "name": "max_jobs",
+              "value": "={{ $json.Max }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "bodyParameters": {
+          "parameters": [
+            {}
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        400,
+        144
+      ],
+      "id": "2afc6101-da77-44a9-8252-099c76423cf3",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "jsCode": "// n8n Function node code\nconst input = $input.all(); // get all input items\nconst jobsArray = input[0].json.jobs; // assuming the data is in the first item under \"jobs\"\n\n// Map each job to the desired format\nconst formattedJobs = jobsArray.map(job => ({\n  job_id: job.job_id,\n  title: job.title,\n  company: job.company,\n  location: job.location,\n  link: job.link,\n  description: job.description || 'N/A'\n}));\n\n// Return the formatted array as the node output\nreturn formattedJobs;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        608,
+        144
+      ],
+      "id": "8ff75768-ddbc-44ab-9bca-3c00d50fee27",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "maxItems": 2
+      },
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        800,
+        160
+      ],
+      "id": "201eb2a8-4d30-4d4b-b2bc-6cc0cfacc8a0",
+      "name": "Limit"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request2": {
+      "main": [
+        [
+          {
+            "node": "Upload file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload file": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Limit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "0264c1fe-b285-42e2-8cc2-657fe7c1250d",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "ee3a57326b93218bcbd00a78e378b9ba311f371b52932b6be9b5bcff50d2a219"
+  },
+  "id": "nUZBxYujBBShYxAT",
+  "tags": []
+}

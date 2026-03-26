@@ -94,9 +94,9 @@ def generate_latex(resume_data: ResumeData) -> str:
     phone = sanitize_latex(resume_data.personal_info.phone)
     email = sanitize_latex(resume_data.personal_info.email)
     linkedin_url = resume_data.personal_info.linkedin_url  # Don't sanitize URLs (breaks href)
-    linkedin_disp_name = sanitize_latex(resume_data.personal_info.linkedin_disp_name)
+    linkedin_disp_name = "LinkedIn"
     github_url = resume_data.personal_info.github_url  # Don't sanitize URLs
-    github_disp_name = sanitize_latex(resume_data.personal_info.github_disp_name)
+    github_disp_name = "Github"
 
     LATEX_TEMPLATE = f"""
 \\documentclass[a4paper,10pt]{{article}}
