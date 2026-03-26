@@ -24,8 +24,8 @@ def sanitize_latex(text: str) -> str:
 
 def generate_latex(resume_data: ResumeData) -> str:
     """Generate LaTeX code from ResumeData"""
-    
-    # Build Education section - sanitize individual fields
+
+    # Build Education section
     education_section = ""
     for edu in resume_data.education:
         courses_str = ", ".join(sanitize_latex(course) for course in edu.courses)
@@ -34,14 +34,14 @@ def generate_latex(resume_data: ResumeData) -> str:
         degree = sanitize_latex(edu.degree)
         gpa = sanitize_latex(edu.gpa) if edu.gpa else ""
         date_range = sanitize_latex(edu.date_range)
-        
-        education_section += f"""
-    \\resumeSubheading
-      {{{institution}}}{{{location}}}
-      {{{degree} GPA:{gpa}}}{{{date_range}}}
 
-      \\textbf{{Courses:}}
-        {courses_str}."""
+        education_section += f"""
+\\noindent\\textbf{{{institution}}} \\hfill {location}\\par
+\\noindent {degree} \\quad GPA: {gpa} \\hfill \\textbf{{{date_range}}}\\par
+\\noindent\\textbf{{Relevant Coursework :}} {courses_str}
+
+\\vspace{{2pt}}
+"""
 
     # Build Skills section
     skills_section = ""
@@ -49,7 +49,8 @@ def generate_latex(resume_data: ResumeData) -> str:
         items_str = ", ".join(sanitize_latex(item) for item in skill.items)
         category = sanitize_latex(skill.category)
         skills_section += f"""
-    \\resumeSubItem{{{category}}}{{{items_str}}}"""
+\\noindent\\textbf{{{category}:}} {items_str}
+"""
 
     # Build Experience section
     experience_section = ""
@@ -58,143 +59,110 @@ def generate_latex(resume_data: ResumeData) -> str:
         for highlight in exp.highlights:
             escaped_highlight = sanitize_latex(highlight)
             highlights_str += f"""
-    \\resumeItemWithoutTitle{{{escaped_highlight}}}"""
-        
+  \\item {escaped_highlight}"""
+
         title = sanitize_latex(exp.title)
         location = sanitize_latex(exp.location)
         company = sanitize_latex(exp.company)
         date_range = sanitize_latex(exp.date_range)
-        
+
         experience_section += f"""
-    \\resumeSubheading
-      {{{title}}}{{{location}}}
-      {{{company}}}{{{date_range}}}
-      \\resumeItemListStart
-      {highlights_str}
-      \\resumeItemListEnd"""
+\\noindent\\textbf{{{title}}} \\hfill {date_range}\\par
+\\noindent {company} \\hfill {location}\\par
+\\begin{{itemize}}{highlights_str}
+\\end{{itemize}}
+
+\\vspace{{2pt}}
+"""
 
     # Build Projects section
     projects_section = ""
     for project in resume_data.projects:
-        desc_items = "\n".join([f"    \\item {sanitize_latex(desc)}" for desc in project.description])
+        desc_items = ""
+        for desc in project.description:
+            desc_items += f"""
+  \\item {sanitize_latex(desc)}"""
+
         name = sanitize_latex(project.name)
-        affiliation = sanitize_latex(project.affiliation)
         date_range = sanitize_latex(project.date_range)
-        
+
         projects_section += f"""
-    \\resumeSubheading
-      {{{name}}}{{}}
-      {{{affiliation}}}{{{date_range}}}
-    \\begin{{itemize}}
-    {desc_items}
-    \\end{{itemize}}"""
+\\noindent\\textbf{{{name}}} \\hfill {date_range}\\par
+\\begin{{itemize}}{desc_items}
+\\end{{itemize}}
+
+\\vspace{{2pt}}
+"""
 
     # Sanitize personal info
     full_name = sanitize_latex(resume_data.personal_info.full_name)
     phone = sanitize_latex(resume_data.personal_info.phone)
-    email = sanitize_latex(resume_data.personal_info.email)
-    linkedin_url = resume_data.personal_info.linkedin_url  # Don't sanitize URLs (breaks href)
-    linkedin_disp_name = "LinkedIn"
-    github_url = resume_data.personal_info.github_url  # Don't sanitize URLs
-    github_disp_name = "Github"
+    location = sanitize_latex(resume_data.personal_info.location) if hasattr(resume_data.personal_info, 'location') else ""
+    email = resume_data.personal_info.email          # Don't sanitize (used in href)
+    linkedin_url = resume_data.personal_info.linkedin_url  # Don't sanitize URLs
+    github_url = resume_data.personal_info.github_url      # Don't sanitize URLs
 
-    LATEX_TEMPLATE = f"""
-\\documentclass[a4paper,10pt]{{article}}
+    LATEX_TEMPLATE = f"""\\documentclass[9pt]{{article}}
 
-\\usepackage{{latexsym}}
-\\usepackage[empty]{{fullpage}}
+% Page geometry - very tight margins
+\\usepackage[a4paper, top=0.25in, bottom=0.25in, left=0.4in, right=0.4in]{{geometry}}
+
+% Times New Roman font
+\\usepackage{{mathptmx}}
+
+% Packages
+\\usepackage{{setspace}}
+\\usepackage{{parskip}}
 \\usepackage{{titlesec}}
-\\usepackage{{marvosym}}
-\\usepackage[usenames,dvipsnames]{{color}}
 \\usepackage{{enumitem}}
-\\usepackage[pdftex, hidelinks]{{hyperref}}
-\\usepackage{{fancyhdr}}
-\\usepackage{{fontawesome}}
-\\usepackage{{xcolor}}
-\\usepackage{{graphicx}}
-\\usepackage{{geometry}}
-\\pagestyle{{fancy}}
-\\fancyhf{{}}
-\\fancyfoot{{}}
-\\renewcommand{{\\headrulewidth}}{{0pt}}
-\\renewcommand{{\\footrulewidth}}{{0pt}}
-\\geometry{{bottom=0.5in, right=0.75in}}
+\\usepackage{{hyperref}}
 
-\\addtolength{{\\oddsidemargin}}{{-1in}}
-\\addtolength{{\\evensidemargin}}{{-1in}}
-\\addtolength{{\\textwidth}}{{1.25in}}
-\\addtolength{{\\topmargin}}{{-1.25in}}
-\\addtolength{{\\textheight}}{{1.25in}}
+% Line spacing
+\\setstretch{{1.05}}
 
-\\urlstyle{{rm}}
+% Remove paragraph indentation
+\\setlength{{\\parindent}}{{0pt}}
+\\setlength{{\\parskip}}{{0pt}}
 
-\\raggedbottom
-\\raggedright
-\\setlength{{\\tabcolsep}}{{0in}}
+% Section formatting - uppercase with rule
+\\titleformat{{\\section}}{{\\normalfont\\bfseries\\uppercase}}{{}}{{0em}}{{}}[\\titlerule]
+\\titlespacing*{{\\section}}{{0pt}}{{5pt}}{{2pt}}
 
-\\titleformat{{\\section}}{{
-  \\vspace{{-8pt}}\\scshape\\raggedright\\large
-}}{{}}{{0em}}{{}}[\\color{{black}}\\titlerule \\vspace{{-4pt}}]
+% Custom bullet style
+\\setlist[itemize]{{label={{--}}, leftmargin=1.0em, itemsep=1pt, parsep=0pt, topsep=2pt}}
 
-\\newcommand{{\\resumeItem}}[2]{{
-  \\item\\small{{
-    \\textbf{{#1}}{{ : #2 \\vspace{{-2pt}}}}
-  }}
-}}
-
-\\newcommand{{\\resumeItemWithoutTitle}}[1]{{
-  \\item\\small{{
-    #1 \\vspace{{-2pt}}
-  }}
-}}
-
-\\newcommand{{\\resumeSubheading}}[4]{{
-  \\vspace{{-1pt}}\\item
-    \\begin{{tabular*}}{{0.97\\textwidth}}{{l@{{\\extracolsep{{\\fill}}}}r}}
-      \\textbf{{#1}} & #2 \\\\
-      \\textit{{#3}} & \\textit{{#4}} \\\\
-    \\end{{tabular*}}\\vspace{{-3pt}}
-}}
-
-\\newcommand{{\\resumeSubItem}}[2]{{\\resumeItem{{#1}}{{#2}}\\vspace{{-3pt}}}}
-
-\\renewcommand{{\\labelitemii}}{{$\\circ$}}
-
-\\newcommand{{\\resumeSubHeadingListStart}}{{\\begin{{itemize}}[leftmargin=*]}}
-\\newcommand{{\\resumeSubHeadingListEnd}}{{\\end{{itemize}}}}
-\\newcommand{{\\resumeItemListStart}}{{\\begin{{itemize}}}}
-\\newcommand{{\\resumeItemListEnd}}{{\\end{{itemize}}\\vspace{{-5pt}}}}
+% No page numbers
+\\pagestyle{{empty}}
 
 \\begin{{document}}
 
+% HEADER
 \\begin{{center}}
-    {{\\Huge \\scshape {full_name}}} \\\\[8pt]
-    \\small
-    \\faPhone ~ \\href{{tel:{phone}}}{{{phone}}} ~|~ 
-    \\faEnvelope ~ \\href{{mailto:{email}}}{{{email}}} ~|~ 
-    \\faLinkedin ~ \\href{{{linkedin_url}}}{{{linkedin_disp_name}}} ~|~ 
-    \\faGithub ~ \\href{{{github_url}}}{{{github_disp_name}}}
+  {{\\large\\bfseries {full_name}}}\\par
+  \\vspace{{2pt}}
+  {{\\small {location} \\textbar{{}}
+   \\href{{mailto:{email}}}{{{email}}} \\textbar{{}}
+   {phone} \\textbar{{}}
+   \\href{{{linkedin_url}}}{{LinkedIn}} \\textbar{{}}
+   \\href{{{github_url}}}{{GitHub}}}}\\par
 \\end{{center}}
+\\vspace{{3pt}}
 
+% EDUCATION
 \\section{{Education}}
-  \\resumeSubHeadingListStart
 {education_section}
-  \\resumeSubHeadingListEnd
 
+% TECHNICAL SKILLS
 \\section{{Technical Skills}}
-  \\resumeSubHeadingListStart
 {skills_section}
-  \\resumeSubHeadingListEnd
 
-\\section{{Experience}}
-  \\resumeSubHeadingListStart
+% RELEVANT EXPERIENCE
+\\section{{Relevant Experience}}
 {experience_section}
-\\resumeSubHeadingListEnd
 
+% PROJECTS
 \\section{{Projects}}
-  \\resumeSubHeadingListStart
 {projects_section}
-  \\resumeSubHeadingListEnd
 
 \\end{{document}}
 """
