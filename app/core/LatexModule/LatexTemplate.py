@@ -116,6 +116,11 @@ def generate_latex(resume_data: ResumeData) -> str:
 \\usepackage{{titlesec}}
 \\usepackage{{enumitem}}
 \\usepackage{{hyperref}}
+\\usepackage[none]{{hyphenat}}
+\\tolerance=1
+\\emergencystretch=\\maxdimen
+\\hyphenpenalty=10000
+\\hbadness=10000
 
 % Line spacing
 \\setstretch{{1.05}}
