@@ -113,6 +113,7 @@ Once ALL mandatory tool calls are done, output ONLY this JSON. First character m
     "personal_info": {
       "full_name": "string",
       "phone": "string",
+      "location": "string",
       "email": "string",
       "linkedin_url": "https://linkedin.com/in/...",
       "linkedin_disp_name": "linkedin.com/in/...",
@@ -161,6 +162,7 @@ Once ALL mandatory tool calls are done, output ONLY this JSON. First character m
     "personal_info": {
       "full_name": "Alex Johnson",
       "phone": "+1 (555) 867-5309",
+      "location": "Chicago, IL",
       "email": "alex.johnson@email.com",
       "linkedin_url": "https://linkedin.com/in/alexjohnson",
       "linkedin_disp_name": "linkedin.com/in/alexjohnson",
@@ -232,6 +234,7 @@ Once ALL mandatory tool calls are done, output ONLY this JSON. First character m
 - No markdown fences, no trailing commas, no single quotes
 - `linkedin_url` must start with `https://linkedin.com/in/`
 - `github_url` must start with `https://github.com/`
+- 'location' in `personal_info` must be a city and state (e.g., "San Francisco, CA")
 - `education`: at least 1 entry
 - `experience`: at least 1 entry  
 - `skills`: exactly 3 categories in this order: Languages → Frameworks & Libraries → Tools & Platforms

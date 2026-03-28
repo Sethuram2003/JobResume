@@ -6,6 +6,7 @@ from typing import List, Optional, Literal
 class PersonalInfo(BaseModel):
     full_name: str
     phone: str
+    location: str
     email: str
     linkedin_url: str
     linkedin_disp_name: str
