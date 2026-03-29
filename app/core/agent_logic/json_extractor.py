@@ -2,36 +2,41 @@ import asyncio
 from langchain.agents import create_agent
 from langchain_ollama import ChatOllama
 from langchain_core.messages import SystemMessage
-from app.core.agent_logic.prompts import SYSTEM_PROMPT
-from app.core.agent_logic.tools import context_for_resume
+from app.core.agent_logic.prompts import SYSTEM_PROMPT_JSON_EXTRACTOR
+from app.core.model import AIResponse
 
 from dotenv import load_dotenv
 load_dotenv()
 
 
-async def chat_agent(session_id: str, user_input: str) -> str:
+async def json_extractor(content:str) -> AIResponse:
     """
-    Process a user input, using the last 5 messages from the database as context.
-    Returns the agent's response.
+    Extract structured resume data from the agent's response content.
     """
-
 
     history = []
 
-    history.append({"role": "user", "content": user_input})
+    history.append({"role": "user", "content": content})
 
-    llm = ChatOllama(model="minimax-m2.7:cloud")
+    llm = ChatOllama(model="deepseek-v3.1:671b-cloud")
 
     agent = create_agent(
         llm,
-        tools=[context_for_resume],
-        system_prompt=SystemMessage(content=SYSTEM_PROMPT)
+        system_prompt=SystemMessage(content=SYSTEM_PROMPT_JSON_EXTRACTOR)
     )
-    
+
     response = await agent.ainvoke({"messages": history})
     final_content = response["messages"][-1].content
 
-    return final_content
+    result = AIResponse.parse_raw(final_content)
+
+    print("Raw agent response content:")
+    print(final_content)
+
+    print("\nParsed AIResponse object:")
+    print(result)
+
+    return result
 
 async def main():
     session_id = "test-session-001"   
@@ -43,7 +48,7 @@ async def main():
         if user_input.lower() in ("exit", "quit"):
             break
 
-        response = await chat_agent(session_id, user_input)
+        response = await json_extractor(user_input)
         print(f"Agent: {response}\n")
 
 if __name__ == "__main__":
