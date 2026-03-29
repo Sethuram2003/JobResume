@@ -75,7 +75,7 @@ Return a valid JSON object containing the extracted nodes and relationships. The
     {{ 
       "id": "unique_string_id_1", 
       "label": "Person", 
-      "properties": {{ "name": "Sethuram Gautham", "location": "New York" }} 
+      "properties": {{ "name": "Name of the person", "location": "New York" }} 
     }},
     {{ 
       "id": "unique_string_id_2", 
