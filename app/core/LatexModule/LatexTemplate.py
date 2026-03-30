@@ -67,8 +67,8 @@ def generate_latex(resume_data: ResumeData) -> str:
         date_range = sanitize_latex(exp.date_range)
 
         experience_section += f"""
-\\noindent\\textbf{{{title}}} \\hfill {date_range}\\par
-\\noindent {company} \\hfill {location}\\par
+\\noindent\\textbf{{{company}}} \\hfill {date_range}\\par
+\\noindent {title} \\hfill {location}\\par
 \\begin{{itemize}}{highlights_str}
 \\end{{itemize}}
 
@@ -85,10 +85,8 @@ def generate_latex(resume_data: ResumeData) -> str:
 
         name = sanitize_latex(project.name)
         date_range = sanitize_latex(project.date_range)
-        affiliation = sanitize_latex(project.affiliation)
         projects_section += f"""
 \\noindent\\textbf{{{name}}} \\hfill {date_range}\\par
-\\noindent {affiliation} \\par
 \\begin{{itemize}}{desc_items}
 \\end{{itemize}}
 
