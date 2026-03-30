@@ -1,8 +1,4 @@
 SYSTEM_PROMPT = """
-
-
-
-
 You are an expert ATS-focused resume generator. When the user provides a job description, use all available context about the user to produce a single, fully written, plain-text resume that is highly tailored to the target role — optimized for applicant tracking systems, keyword relevance, and recruiter readability.
 
 ---
@@ -33,8 +29,14 @@ Before writing, analyze the job description to extract: the target role, require
 Always use this exact fixed information. Never alter any value:
 
 ```
-Remoon Zean Joseph Aron
-New York, NY | remoonzean.josepharon@stonybrook.edu | 934-255-9114 | LinkedIn: Remoon
+the below are the personal details of the candidate, these must be used exactly as is in the resume output, do not change any value or format, keep it exactly as is:
+Sethuram Gautham Rajakumar
++1 (934) 246 4678
+New York, NY
+sethuramgautha.rajakumar@stonybrook.edu
+https://linkedin.com/in/sethuramgautham
+https://github.com/Sethuram2003
+
 ```
 
 ---
@@ -47,13 +49,13 @@ Always use these exact fixed values. Never alter institution names, degrees, GPA
 EDUCATION
 
 Stony Brook University — New York
-Master of Science in Business Analytics | GPA: 3.93 | August 2024 – May 2026
-Relevant Coursework : Risk and Uncertainty Analytics, Data Mining, Database Management, Decision Support Systems
-Anna University (Rajalakshmi Engineering College) — Chennai
-Bachelor of Technology in Artificial Intelligence and Machine Learning | CGPA: 8.32 | August 2020 – May 2024
-Relevant Coursework: Relevant Coursework : Fundamentals of ML, Time Series Forecasting Analysis, Principles of AI, NLP, Accounting
+Master of Science in Data Science | GPA: 3.67 | August 2024 – May 2026
+Relevant Coursework : <choose 3 which are most relevant to the job description, e.g. Machine Learning, Deep Learning, Data Mining, Natural Language Processing, Computer Vision, Big Data Analytics, etc.>
+SSN College of engineering — Tamilnadu, Chennai
+Bachelor of Engineering in Electrical and Electronics Engineering | CGPA: 8.8 | August 2020 – May 2024
+Relevant Coursework: <choose 3 which are most relevant to the job description, e.g. Data Structures and Algorithms, Operating Systems, Database Management Systems, Computer Networks, Software Engineering, etc.>
 
-```
+'''
 
 List entries most recent first.
 
@@ -73,14 +75,11 @@ List entries most recent first.
 Always use these exact fixed values for company names, job titles, and dates. Never alter them:
 
 ```
-Research Assistant | January 2025 – April 2025
-Business Data Analyst Research — Stony Brook University
+Associate Software Engineer Intern | May 2025 – Jan 2026
+HGS CX Technologies Inc | New York, NY
 
-Business Intelligence and Development Intern | June 2023 – August 2024
-Pansen Engineering
-
-Business and Marketing Analyst Intern | January 2023 – April 2023
-Plumb5 Analytics
+Automation Engineer Intern | Jan 2023 – Feb 2023
+EQuad Engineering Services Pvt.Ltd | Chennai, India
 
 ```
 
@@ -96,8 +95,8 @@ Rules for bullets:
 
 **SECTION 5 — PROJECTS**
 
-- Include exactly 3 projects, listed most recent first.
-- Each project must have exactly 2 bullet points.
+- Include exactly 4 projects, listed most recent first.
+- Each project must have exactly 3 bullet points.
 - Each bullet must fit 2 lines but explain detail and clearly even you can go to till the end of the page on an A4 document.
 - Every bullet must use a unique action verb not already used anywhere in the resume.
 - Every bullet must follow the narrative structure: "X achieved Y using Z technical skill" with a quantified result formatted as 50k, 1M, 3x, etc.
@@ -106,6 +105,10 @@ Rules for bullets:
 
 ---
 
+- Output only the resume content. Do not include any notes, commentary, strategy summaries, ATS score explanations, or post-resume annotations of any kind.
+- The output must be in plain text format, ready to be copied into a Word document or Google Doc. Do not use markdown, HTML, or any formatting syntax.
+- It should have all the information needed to create a visually appealing, well-structured resume, but the formatting and design choices are up to the user when they transfer it into their document editor.
+- It should have my personal information, education, skills, experience, and projects all clearly delineated and organized in a standard resume structure, but the exact visual formatting (fonts, colors, layout) is not your concern.
 
 """
 
@@ -264,8 +267,8 @@ When context is ambiguous, default to **"Self-Initiated Project"**.
 | Field                    | Required count |
 |--------------------------|----------------|
 | `experience.highlights`  | Exactly 3      |
-| `projects.description`   | Exactly 2      |
-| `projects` (total)       | Exactly 3      |
+| `projects.description`   | Exactly 3      |
+| `projects` (total)       | Exactly 4      |
 
 These counts are non-negotiable. Never produce fewer or more items than specified.
 
@@ -363,7 +366,16 @@ These counts are non-negotiable. Never produce fewer or more items than specifie
           "Designed and implemented a distributed file system in Python supporting concurrent reads/writes across 10 nodes.",
           "Achieved 99.9% uptime under simulated failure conditions across all 10 nodes during stress testing."
         ]
-      }
+      },
+        {
+          "name": "E-commerce Data Pipeline",
+          "affiliation": "Professional Project",
+          "date_range": "",
+          "description": [
+            "Developed an ETL pipeline using Apache Airflow to process and analyze 1M+ daily transactions for a retail client.",
+            "Enabled real-time sales analytics and reporting, improving decision-making speed by 50%."
+          ]
+        }
     ]
   }
 }
