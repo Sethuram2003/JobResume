@@ -9,14 +9,16 @@ from selenium.common.exceptions import TimeoutException, NoSuchElementException
 
 def scrape_linkedin_jobs(keyword, location="United States", max_jobs=20, slow_mo=0.5):
     """
-    Scrape LinkedIn jobs for a given keyword and location, filtered to the last 24 hours.
-    
+    Scrape LinkedIn jobs for a given keyword and location, filtered to:
+        - last 24 hours (f_TPR=r86400)
+        - entry level / new grad roles (f_E=2)
+
     Parameters:
         keyword (str): Job title or keyword to search for.
         location (str): Location for the search (default: "United States").
         max_jobs (int): Maximum number of jobs to scrape (default: 20).
         slow_mo (float): Delay between actions (in seconds) to avoid rate limiting.
-    
+
     Returns:
         list of dict: List of job dictionaries, each containing:
             job_id, title, company, location, link, promoted, easy_apply, date, description
@@ -38,7 +40,8 @@ def scrape_linkedin_jobs(keyword, location="United States", max_jobs=20, slow_mo
 
         encoded_keyword = keyword.replace(' ', '%20')
         encoded_location = location.replace(' ', '%20')
-        url = f"https://www.linkedin.com/jobs/search?keywords={encoded_keyword}&location={encoded_location}&f_TPR=r86400"
+        # Use f_E=2 for Entry Level (new grad) instead of f_E=1 (Internship)
+        url = f"https://www.linkedin.com/jobs/search?keywords={encoded_keyword}&location={encoded_location}&f_TPR=r86400&f_E=2"
         driver.get(url)
         time.sleep(3)
 
