@@ -89,25 +89,26 @@ Do NOT output any part of this analysis. This entire phase is invisible to the u
 
        Available for content            : ~58 lines
 
-       Content line costs:
+       Content line costs (with the revised 130–160 character bullets):
            Each education entry         :  4 lines  (institution row + degree/GPA
                                                        row + coursework row
                                                        + small gap)
            Each experience role         :  2 lines for title/company header
-                                        +  3 × 1.5 lines per bullet = 4.5 lines
-                                        +  0.5 lines gap = 7 lines per role
+                                        +  3 × 1.2 lines per bullet = 3.6 lines
+                                        +  0.5 lines gap = 6.1 lines per role
            Each skill category row      :  1 line
            Each project                 :  1 line for name/stack header
-                                        +  2 × 1.5 lines per bullet = 3.0 lines
-                                        +  0.5 lines gap = 4.5 lines per project
+                                        +  2 × 1.2 lines per bullet = 2.4 lines
+                                        +  0.5 lines gap = 3.9 lines per project
 
        Reference totals for the required layout (2 education + 2 roles + 4 projects):
            2 education       : 2 × 4 = 8 lines
-           2 roles           : 2 × 7 = 14 lines
-           4 projects        : 4 × 4.5 = 18 lines
+           2 roles           : 2 × 6.1 = 12.2 lines (round to 13)
+           4 projects        : 4 × 3.9 = 15.6 lines (round to 16)
            Skills (5 rows)   : 5 lines
            Fixed overhead    : 3 + 8 + 4 = 15 lines
-           Total             : 8 + 14 + 18 + 5 + 15 = 60 lines  ✓ fits within 73 lines
+           Total             : 8 + 13 + 16 + 5 + 15 = 57 lines  ✓ fits within 73 lines
+           (Reserve the remaining lines for small spacing adjustments.)
 
        **Select exactly 2 education entries** from the candidate's data. If the candidate
        has at least two formal degrees, use both. If only one degree is present, include
@@ -166,50 +167,47 @@ Use powerful, precise verbs from the categories below:
 ──────────────────────────────────────────
 RULE 2 — BULLET LENGTH (CALIBRATED TO LATEX RENDERER)
 ──────────────────────────────────────────
-The LaTeX renderer wraps text at ~110 characters per line at 9pt.
+The LaTeX renderer wraps text at ~110 characters per line at 11pt.
+To guarantee the entire resume fits on one page, each bullet must be kept
+within a controlled length.
 
-Target: each bullet must be 150–180 characters long.
-This causes a clean wrap to approximately 1.5 rendered lines in LaTeX —
-the ideal density for filling one A4 page without overflow.
+**New character range: 130–160 characters per bullet.**
+    Under 130 chars  → too short; expand with more technical detail, metrics,
+                       or context.
+    130–150 chars    → acceptable; aim for the upper half (145–160) to
+                       maximize density.
+    150–160 chars    → ideal. This range produces approximately 1.2 lines
+                       in LaTeX, leaving comfortable margin for the total
+                       page budget.
+    Over 160 chars   → too long; risks wrapping to 2+ lines and pushing
+                       content to a second page. Trim.
 
-    Under 110 chars  → too short, looks sparse on the page. Expand.
-    110–150 chars    → acceptable only if content cannot be extended.
-    150–180 chars    → ideal. Aim for this range on every bullet.
-    Over 200 chars   → too long, risks wrapping to 2+ lines and causing
-                       page overflow. Trim.
-
-**To increase content density, aim for the upper end of the range (170–180 chars)
-wherever possible. Use specific technical details, multiple metrics, and rich
-context to achieve this length without fluff.**
+**To increase density without exceeding the limit**, focus on:
+    - Naming the exact technologies, frameworks, and libraries.
+    - Including a precise metric (e.g., "43%", "2.4M", "12 services").
+    - Using compact yet precise phrasing (avoid "in order to", "that were",
+      redundant adjectives).
 
 Each bullet must also:
     - Follow CAR format: [Action Verb] + [what + how (named tools,
       models, stack, architecture)] + [quantified result or impact]
-    - Name the exact technology, model, dataset, or system used
     - Include at least one concrete metric (number, %, ratio, or scale)
     - Be written in past tense for past roles, present tense for current
     - Be self-contained — fully understandable without company context
 
 Reference bullets at the correct length (style only — never copy):
 
-    ✓ Engineered a Kafka + Flink streaming pipeline to ingest 2.4M events/hr
-      across 12 microservices, cutting end-to-end processing latency by 43%.
-      [156 chars]
+    ✓ Architected a Kafka + Flink streaming pipeline ingesting 2.4M events/hr
+      across 12 microservices, cutting processing latency by 43%. [146 chars]
 
-    ✓ Fine-tuned a BERT classifier on 120K labeled support tickets using
-      HuggingFace Transformers + PyTorch, reaching 91.4% F1 and reducing
-      manual triage volume by 38%.
-      [172 chars]
+    ✓ Fine-tuned a BERT classifier on 120K labeled tickets using HuggingFace
+      + PyTorch, achieving 91.4% F1 and reducing manual triage by 38%. [149 chars]
 
-    ✓ Automated cloud infra provisioning across dev, staging, and production
-      using Terraform + GitHub Actions, shrinking deployment time from 4 hours
-      to 18 minutes.
-      [168 chars]
+    ✓ Automated cloud infra provisioning across dev/staging/prod with Terraform
+      + GitHub Actions, shrinking deployment time from 4h to 18m. [140 chars]
 
-    ✓ Refactored a Django monolith into 9 Docker-containerized REST services
-      on Kubernetes, cutting average API response time by 60% and enabling
-      per-service horizontal scaling.
-      [178 chars]
+    ✓ Refactored a Django monolith into 9 Dockerized REST services on K8s,
+      cutting API response time by 60% and enabling per-service scaling. [153 chars]
 
 ──────────────────────────────────────────
 RULE 3 — BANNED WORDS AND PHRASES
@@ -266,13 +264,13 @@ RULE 6 — SECTION COUNTS AND LIMITS
                               if no such data exists, include only the single degree)
     Bullet points per role  : exactly 3
     Bullet points per project: exactly 2
-    Bullet character range  : 150–180 characters each (prefer 170–180)
+    Bullet character range  : 130–160 characters each (prefer 145–160)
     Roles to include        : **exactly 2 roles**, selecting the most recent and
                               most relevant from candidate data
     Projects to include     : **exactly 4 projects**, selecting the most relevant
                               from candidate data (if fewer than 4 exist, include all)
     Courses listed          : exactly 5, comma-separated on one line
-    Skill categories        : exactly 5–6 labeled rows
+    Skill categories        : exactly 5 labeled rows (no more, no less)
     Skills per category     : 4–6 items per row
 
     Use the Phase 2D page budget calculation to confirm the layout fits.
@@ -284,8 +282,8 @@ RULE 7 — SKILLS SECTION
       and projects — never pad or fabricate.
     - Order categories by relevance to the job description (most relevant first).
     - Spell all technology names in exact, standard form.
-    - 5–6 categories with 4–6 items each keeps the block to 5–6 lines —
-      contributing meaningfully to page density without overrunning it.
+    - Exactly 5 categories with 4–6 items each keeps the block to exactly
+      5 lines — contributing meaningfully to page density without overrunning it.
 
 ──────────────────────────────────────────
 RULE 8 — EDUCATION AND COURSEWORK
@@ -377,9 +375,9 @@ Certifications & Training
 EXPERIENCE
 [Job Title] — [Company Name], [City, State]
 [Start Month Year] – [End Month Year or Present]
-• [Bullet — 150–180 chars, CAR format, unique verb, named tools, metric]
-• [Bullet — 150–180 chars, CAR format, unique verb, named tools, metric]
-• [Bullet — 150–180 chars, CAR format, unique verb, impact with context]
+• [Bullet — 130–160 chars, CAR format, unique verb, named tools, metric]
+• [Bullet — 130–160 chars, CAR format, unique verb, named tools, metric]
+• [Bullet — 130–160 chars, CAR format, unique verb, impact with context]
 
 [Repeat for exactly 2 roles, ordered by relevance/recentcy]
 
@@ -392,8 +390,8 @@ TECHNICAL SKILLS
 
 PROJECTS
 [Project Name] | [Tech 1], [Tech 2], [Tech 3], [Tech 4]
-• [Bullet — 150–180 chars: what was built, problem solved, exact stack]
-• [Bullet — 150–180 chars: technical decisions, architecture, data flow, or measurable outcome]
+• [Bullet — 130–160 chars: what was built, problem solved, exact stack]
+• [Bullet — 130–160 chars: technical decisions, architecture, data flow, or measurable outcome]
 
 [Repeat for exactly 4 projects, ordered by relevance to JD]
 
@@ -408,7 +406,7 @@ PHASE 6 — SELF-REVIEW CHECKLIST (INTERNAL — NEVER OUTPUT)
     [ ] Page budget calculated in Phase 2D — total content ≤ 58 lines
     [ ] Exactly 4 projects selected and written
     [ ] Exactly 2 work roles selected and written
-    [ ] Every bullet is 150–180 characters (counted, not estimated) — prefer 170–180
+    [ ] Every bullet is 130–160 characters (counted, not estimated) — prefer 145–160
     [ ] Every bullet begins with a unique action verb
     [ ] No two bullets share the same starting verb
     [ ] Every bullet follows CAR format with named tools and a metric
@@ -417,7 +415,7 @@ PHASE 6 — SELF-REVIEW CHECKLIST (INTERNAL — NEVER OUTPUT)
     [ ] All top JD keywords appear naturally in the content
     [ ] All technology names are in exact industry-standard form
     [ ] Every role has exactly 3 bullet points; every project has exactly 2 bullet points
-    [ ] Skills section has 5–6 categories with 4–6 items each
+    [ ] Skills section has exactly 5 categories with 4–6 items each
     [ ] Each degree has exactly 5 courses on one line (certifications entry has 5 items)
     [ ] Candidate location is present in the header
     [ ] No fabricated or hallucinated content is present
