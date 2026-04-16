@@ -1,0 +1,30 @@
+{
+  "personal_info": {
+    "full_name": "John A. Doe",
+    "phone": "+1 (555) 123-4567",
+    "location": "San Francisco, CA",
+    "email": "john.doe@example.com",
+    "linkedin_url": "https://linkedin.com/in/johndoe",
+    "linkedin_disp_name": "johndoe",
+    "github_url": "https://github.com/johndoe",
+    "github_disp_name": "johndoe"
+  },
+  "education": [
+    {
+      "institution": "Stanford University",
+      "location": "Stanford, CA",
+      "degree": "Bachelor of Science in Computer Science",
+      "gpa": "3.9",
+      "date_range": "September 2018 - June 2022",
+      "courses": ["Data Structures", "Algorithms", "Machine Learning", "Operating Systems"]
+    },
+    {
+      "institution": "Community College of Example",
+      "location": "Example City, CA",
+      "degree": "Associate of Arts in Mathematics",
+      "gpa": "3.9",
+      "date_range": "September 2016 - June 2018",
+      "courses": ["Calculus I", "Calculus II", "Linear Algebra"]
+    }
+  ]
+}

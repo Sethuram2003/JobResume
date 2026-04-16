@@ -67,8 +67,8 @@ def generate_latex(resume_data: ResumeData) -> str:
         date_range = sanitize_latex(exp.date_range)
 
         experience_section += f"""
-\\noindent\\textbf{{{title}}} \\hfill {date_range}\\par
-\\noindent {company} \\hfill {location}\\par
+\\noindent\\textbf{{{company}}} \\hfill {date_range}\\par
+\\noindent {title} \\hfill {location}\\par
 \\begin{{itemize}}{highlights_str}
 \\end{{itemize}}
 
@@ -85,9 +85,8 @@ def generate_latex(resume_data: ResumeData) -> str:
 
         name = sanitize_latex(project.name)
         date_range = sanitize_latex(project.date_range)
-
         projects_section += f"""
-\\noindent\\textbf{{{name}}} \\hfill {date_range}\\par
+\\noindent\\textbf{{{name}}} \\hfill \\par
 \\begin{{itemize}}{desc_items}
 \\end{{itemize}}
 
@@ -102,7 +101,8 @@ def generate_latex(resume_data: ResumeData) -> str:
     linkedin_url = resume_data.personal_info.linkedin_url  # Don't sanitize URLs
     github_url = resume_data.personal_info.github_url      # Don't sanitize URLs
 
-    LATEX_TEMPLATE = f"""\\documentclass[9pt]{{article}}
+    LATEX_TEMPLATE = f"""
+\\documentclass[11pt]{{article}}
 
 % Page geometry - very tight margins
 \\usepackage[a4paper, top=0.25in, bottom=0.25in, left=0.4in, right=0.4in]{{geometry}}
@@ -123,7 +123,7 @@ def generate_latex(resume_data: ResumeData) -> str:
 \\hbadness=10000
 
 % Line spacing
-\\setstretch{{1.05}}
+\\setstretch{{1.0}}
 
 % Remove paragraph indentation
 \\setlength{{\\parindent}}{{0pt}}
@@ -143,16 +143,14 @@ def generate_latex(resume_data: ResumeData) -> str:
 
 % HEADER
 \\begin{{center}}
-  {{\\large\\bfseries {full_name}}}\\par
-  \\vspace{{2pt}}
+  {{\\fontsize{{20}}{{18}}\\selectfont\\bfseries {full_name}}}\\par
+  \\vspace{{1pt}}
   {{\\small {location} \\textbar{{}}
    \\href{{mailto:{email}}}{{{email}}} \\textbar{{}}
    {phone} \\textbar{{}}
    \\href{{{linkedin_url}}}{{LinkedIn}} \\textbar{{}}
    \\href{{{github_url}}}{{GitHub}}}}\\par
 \\end{{center}}
-\\vspace{{3pt}}
-
 % EDUCATION
 \\section{{Education}}
 {education_section}

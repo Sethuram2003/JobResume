@@ -35,7 +35,7 @@ class Experience(BaseModel):
 class Project(BaseModel):
     name: str
     affiliation: Literal["Self-Initiated Project", "Academic Project", "Professional Project"]
-    date_range: str  
+    date_range: Optional[str] = None
     description: List[str]
 
 class ResumeData(BaseModel):

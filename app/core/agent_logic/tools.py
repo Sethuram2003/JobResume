@@ -15,30 +15,36 @@ def context_for_resume(query: str) -> str:
     Query the candidate's resume knowledge base to retrieve specific information.
 
     IMPORTANT: After receiving a result from this tool, you must continue calling
-    this tool for all remaining required data. Do NOT emit any text or JSON until
-    ALL of the following have been collected:
-        1. Personal details (name, phone, email, LinkedIn, GitHub)
-        2. Education (university, degree, GPA, dates, courses)
-        3. Work experience (all roles: title, company, location, dates, highlights)
-        4. Technical skills (languages, frameworks, tools)
-        5. At least 2-3 projects relevant to the job description
+    this tool until ALL of the following categories have been collected. Do NOT
+    emit any text or output until every category below has been retrieved:
 
-    Only after all 5 categories are collected should you stop calling this tool
-    and emit the final JSON output.
+        1. Personal details — full name, phone number, email, LinkedIn URL, GitHub URL,
+                              city, state, country.
+        2. Education — ALL degrees (bachelor's, master's, etc.) with university,
+                       degree name, major, GPA, graduation date, relevant coursework.
+                       **Use a query like: "What are all the candidate's education details?"
+                       to retrieve multiple degrees. Do not stop after one result.**
+        3. Work experience — all roles with job title, company, location, dates,
+                             and bullet highlights.
+        4. Technical skills — programming languages, frameworks, libraries, and tools.
+        5. Projects — all projects, including name, description, technologies used,
+                      and outcomes.
 
-    Each call must ask about ONE specific topic using a focused natural language query.
+    Each call must target ONE specific category using a focused natural language query.
+    Examples of effective queries:
 
-    Good query examples:
-    - "full name, phone number, email, LinkedIn URL, GitHub URL"
-    - "university, degree, GPA, graduation date, relevant coursework"
-    - "all work experiences: job title, company, location, dates, bullet highlights"
-    - "all technical skills: programming languages, frameworks, libraries, tools"
-    - "projects involving machine learning, NLP, or deep learning"
-    - "projects involving distributed systems or cloud infrastructure"
-    - "experience with Docker, Kubernetes, or CI/CD pipelines"
+        - "What are the candidate's personal details?"
+        - "Show all education details, including bachelor's and master's degrees."
+        - "List all work experience with bullet points."
+        - "What technical skills does the candidate have?"
+        - "Give me all projects with descriptions and technologies."
+
+    Only after all 5 categories are fully collected should you stop calling this tool
+    and produce the final resume output.
 
     Args:
-        query: A focused natural language question about one aspect of the candidate's resume.
+        query: A focused natural language question about one specific category
+               from the candidate's resume.
 
     Returns:
         A string containing the resume content matching the query.
