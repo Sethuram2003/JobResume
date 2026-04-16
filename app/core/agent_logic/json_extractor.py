@@ -8,11 +8,9 @@ from app.core.model import AIResponse, ResumeData, PersonalInfo, Education
 from dotenv import load_dotenv
 load_dotenv()
 
-
 import json
 from pathlib import Path
 from pydantic import ValidationError
-
 
 async def json_extractor(content: str) -> AIResponse:
     """
@@ -36,7 +34,7 @@ async def json_extractor(content: str) -> AIResponse:
     history = []
     history.append({"role": "user", "content": content})
 
-    llm = ChatOllama(model="deepseek-v3.1:671b-cloud")
+    llm = ChatOllama(model="deepseek-v3.1:671b-cloud", format="json")
     agent = create_agent(
         llm,
         system_prompt=SystemMessage(content=SYSTEM_PROMPT_JSON_EXTRACTOR)

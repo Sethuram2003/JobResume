@@ -20,7 +20,7 @@ async def chat_agent(session_id: str, user_input: str) -> str:
 
     history.append({"role": "user", "content": user_input})
 
-    llm = ChatOllama(model="minimax-m2.7:cloud")
+    llm = ChatOllama(model="kimi-k2:1t-cloud")
 
     agent = create_agent(
         llm,
